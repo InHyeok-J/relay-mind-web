@@ -3,20 +3,19 @@ import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
+import * as passport from 'passport';
 import 'reflect-metadata';
-import {
-    routerHandler,
-    logHandler,
-    errorHandler,
-} from './middleware/errorHandler';
+import { logHandler, errorHandler } from './middleware/errorHandler';
 import env from './configs';
 import routes from './routes';
 import { createConnection } from 'typeorm';
 import ConnectionOptions from './database/ormconfig';
+import passportConfig from './configs/passport';
 import './utils/customReponse';
 
 const app = express();
 
+passportConfig();
 createConnection(ConnectionOptions)
     .then(async (connection) => {
         console.log('success');
@@ -35,6 +34,9 @@ app.use(
         saveUninitialized: false,
     })
 );
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get('/', (req, res, next) => {
     res.send('hello');
 });

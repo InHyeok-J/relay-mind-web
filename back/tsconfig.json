@@ -18,7 +18,8 @@
         "typeRoots": ["./src/types", "./node_modules/@types"],
         "noImplicitReturns": true,
         "strictPropertyInitialization": false,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "strictNullChecks": false
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules", "test/**/*.ts"],
