@@ -1,18 +1,28 @@
 {
     "compilerOptions": {
-        "lib": ["ES5", "ES6"],
         "target": "ES6",
         "module": "commonjs",
+        "lib": ["ES5", "ES6", "es2017"],
+        "sourceMap": true,
+        "outDir": "./dist",
         "moduleResolution": "Node",
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "sourceMap": true,
+        "resolveJsonModule": true,
         "rootDir": "src",
-        "outDir": "dist",
         "strict": true,
-        "strictPropertyInitialization": false
+        "baseUrl": "src/",
+        "typeRoots": ["./src/types", "./node_modules/@types"],
+        "noImplicitReturns": true,
+        "strictPropertyInitialization": false,
+        "noFallthroughCasesInSwitch": true,
+        "strictNullChecks": false
     },
-    "include": ["src/*.ts", "ormconfig.ts"],
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "test/**/*.ts"],
     "ts-node": {
         "files": true
     }

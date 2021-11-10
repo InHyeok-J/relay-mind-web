@@ -1,22 +1,21 @@
-import { User } from './entity/User';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
+import * as passport from 'passport';
 import 'reflect-metadata';
-import {
-    routerHandler,
-    logHandler,
-    errorHandler,
-} from './middleware/errorHandler';
+import { logHandler, errorHandler } from './middleware/errorHandler';
 import env from './configs';
-import userRouter from './routes/user';
+import routes from './routes';
 import { createConnection } from 'typeorm';
 import ConnectionOptions from './database/ormconfig';
+import passportConfig from './configs/passport';
+import './utils/customReponse';
 
 const app = express();
 
+passportConfig();
 createConnection(ConnectionOptions)
     .then(async (connection) => {
         console.log('success');
@@ -35,14 +34,15 @@ app.use(
         saveUninitialized: false,
     })
 );
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get('/', (req, res, next) => {
     res.send('hello');
 });
 
-app.use('/api/user', userRouter);
-
-//404 Router Handler
-app.use(routerHandler);
+//All router
+app.use('/', routes);
 
 //Error Log and Handler
 app.use(logHandler);
