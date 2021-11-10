@@ -4,7 +4,7 @@
     "description": "nodejs + javascript + express boilerplate",
     "main": "/src/index.js",
     "scripts": {
-        "dev": "nodemon --exec ts-node src/app",
+        "dev": "nodemon --exec ts-node src/app.ts",
         "start": "tsc &&  node dist/app.js",
         "typeorm": "ts-node ./node_modules/.bin/typeorm -f ./src/database/ormconfig.ts",
         "migration:generate": "yarn run typeorm migration:generate -n",
@@ -13,6 +13,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "bcrypt": "^5.0.1",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
@@ -21,10 +22,13 @@
         "express-session": "^1.17.2",
         "morgan": "^1.10.0",
         "mysql2": "^2.3.3-rc.0",
+        "passport": "^0.5.0",
+        "passport-local": "^1.0.0",
         "reflect-metadata": "^0.1.13",
         "typeorm": "^0.2.39"
     },
     "devDependencies": {
+        "@types/bcrypt": "^5.0.0",
         "@types/cookie-parser": "^1.4.2",
         "@types/cors": "^2.8.12",
         "@types/dotenv": "^8.2.0",
@@ -32,6 +36,8 @@
         "@types/express-session": "^1.17.4",
         "@types/morgan": "^1.9.3",
         "@types/node": "^16.11.6",
+        "@types/passport": "^1.0.7",
+        "@types/passport-local": "^1.0.34",
         "@typescript-eslint/eslint-plugin": "^5.3.0",
         "eslint": "^7.31.0",
         "eslint-config-prettier": "^8.3.0",

@@ -30,8 +30,9 @@ export const errorHandler = (
         if (value instanceof Error) {
             return {
                 // Pull all enumerable properties, supporting properties on custom Errors
-                ...value,
+                // ...value,
                 // Explicitly pull Error's non-enumerable properties
+                status: err.status,
                 name: value.name,
                 message: value.message,
             };
