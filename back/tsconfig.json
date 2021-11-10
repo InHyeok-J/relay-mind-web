@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "lib": ["ES5", "ES6"],
+        "target": "ES6",
+        "module": "commonjs",
+        "moduleResolution": "Node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "rootDir": "src",
+        "outDir": "dist",
+        "strict": true,
+        "strictPropertyInitialization": false
+    },
+    "include": ["src/*.ts", "ormconfig.ts"],
+    "ts-node": {
+        "files": true
+    }
+}
