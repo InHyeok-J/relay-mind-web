@@ -11,7 +11,7 @@ export const signUp = catchAsync(async (req, res, next) => {
     if (existNickname)
         return res.customFail(400, '이미 사용중인 닉네임입니다.');
 
-    const existUserId = await userRepository.findOne({ where: { nickname } });
+    const existUserId = await userRepository.findOne({ where: { userId } });
     if (existUserId) return res.customFail(400, '이미 사용중인 아이디입니다.');
 
     const newUser = new User();
