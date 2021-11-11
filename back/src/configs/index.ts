@@ -2,6 +2,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const NODE_ENV: string = process.env.NODE_ENV || 'development';
+console.log(process.env.NODE_ENV);
+console.log(NODE_ENV);
 if (NODE_ENV === 'production')
     dotenv.config({ path: `${__dirname}/../../.env.prod` });
 else if (NODE_ENV === 'development')
@@ -17,6 +19,7 @@ const databaseConfig = {
     DATABASE_PORT: env.DATABASE_PORT,
     DATABASE_USERNAME: env.DATABASE_USERNAME,
     DATABASE_PASSWORD: env.DATABASE_PASSWORD,
+    DATABASE_SCHEMA: env.DATABASE_SCHEMA,
 };
 
 const envExport = {
