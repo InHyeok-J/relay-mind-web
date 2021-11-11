@@ -5,7 +5,8 @@
     "main": "/src/index.js",
     "scripts": {
         "dev": "nodemon --exec ts-node src/app.ts",
-        "start": "tsc &&  node dist/app.js",
+        "start": "tsc --build && cross-env NODE_ENV=production node dist/app.js",
+        "build": "tsc --build",
         "typeorm": "ts-node ./node_modules/.bin/typeorm -f ./src/database/ormconfig.ts",
         "migration:generate": "yarn run typeorm migration:generate -n",
         "migration:blank": "yarn run typeorm migration:create -n"
@@ -16,6 +17,7 @@
         "bcrypt": "^5.0.1",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
+        "cross-env": "^7.0.3",
         "dotenv": "^10.0.0",
         "dotenv-cli": "^4.0.0",
         "express": "^4.17.1",

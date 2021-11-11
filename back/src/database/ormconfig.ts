@@ -10,7 +10,7 @@ export default {
     port: dbConfig.DATABASE_PORT,
     username: dbConfig.DATABASE_USERNAME,
     password: dbConfig.DATABASE_PASSWORD,
-    database: 'relaymind',
+    database: dbConfig.DATABASE_SCHEMA,
     synchronize: true,
     logging: false,
     entities: [path.join(__dirname, '..', 'entity', '**', '*.*')],
