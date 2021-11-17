@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
 import Modal from 'react-modal';
-import LoginModal from './components/LoginModal'
+import LoginModal from './components/MainModal'
 import fullLogo from '../assets/RM_FullLogo.png';
 import paperBackground from '../assets/Bg_paperTexture.jpg';
 
