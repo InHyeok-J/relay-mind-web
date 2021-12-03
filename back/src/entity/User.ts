@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Player } from './Player';
+import {
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryColumn,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 @Entity()
 export class User {
@@ -13,6 +20,9 @@ export class User {
 
     @Column('varchar', { length: 100 })
     password: string;
+
+    @OneToMany(() => Player, (player) => player.player)
+    myGame: Player[];
 
     hashPassword() {
         this.password = bcrypt.hashSync(this.password, 10);

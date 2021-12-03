@@ -2,8 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const NODE_ENV: string = process.env.NODE_ENV || 'development';
-console.log(process.env.NODE_ENV);
-console.log(NODE_ENV);
+
 if (NODE_ENV === 'production')
     dotenv.config({ path: `${__dirname}/../../.env.prod` });
 else if (NODE_ENV === 'development')
