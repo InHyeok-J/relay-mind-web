@@ -15,6 +15,7 @@
     "license": "ISC",
     "dependencies": {
         "bcrypt": "^5.0.1",
+        "connect-redis": "^6.0.0",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
         "cross-env": "^7.0.3",
@@ -26,11 +27,13 @@
         "mysql2": "^2.3.3-rc.0",
         "passport": "^0.5.0",
         "passport-local": "^1.0.0",
+        "redis": "^4.0.0",
         "reflect-metadata": "^0.1.13",
         "typeorm": "^0.2.39"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",
+        "@types/connect-redis": "^0.0.17",
         "@types/cookie-parser": "^1.4.2",
         "@types/cors": "^2.8.12",
         "@types/dotenv": "^8.2.0",

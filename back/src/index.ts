@@ -4,6 +4,7 @@ import * as cors from 'cors';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import * as RedisStore from 'connect-redis';
 import 'reflect-metadata';
 import { logHandler, errorHandler } from './middleware/errorHandler';
 import env from './configs';
@@ -11,9 +12,11 @@ import routes from './routes';
 import { createConnection } from 'typeorm';
 import ConnectionOptions from './database/ormconfig';
 import passportConfig from './configs/passport';
+import client from './database/redisClient';
 import './utils/customReponse';
 
 const app = express();
+const redisSession = RedisStore(session);
 
 passportConfig();
 
@@ -33,14 +36,14 @@ app.use(
         secret: env.COOKIE_SECRET!,
         resave: false,
         saveUninitialized: false,
+        store: new redisSession({
+            client: client,
+        }),
     })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.get('/', (req, res, next) => {
-    res.send('hello');
-});
 
 //All router
 app.use('/', routes);

@@ -2,7 +2,7 @@ import env from '../configs';
 import { ConnectionOptions } from 'typeorm';
 import * as path from 'path';
 
-const dbConfig = env.databaseConfig;
+const dbConfig = env.MYSQL_CONFIG;
 
 export default {
     type: dbConfig.DATABASE_TYPE,

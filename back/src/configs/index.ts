@@ -12,7 +12,7 @@ else if (NODE_ENV === 'test')
 
 const env = process.env;
 
-const databaseConfig = {
+const MYSQL_CONFIG = {
     DATABASE_TYPE: env.DATABASE_TYPE,
     DATABASE_HOST: env.DATABASE_HOST,
     DATABASE_PORT: env.DATABASE_PORT,
@@ -24,6 +24,7 @@ const databaseConfig = {
 const envExport = {
     PORT: env.PORT,
     COOKIE_SECRET: env.COOKIE_SECRET,
-    databaseConfig,
+    MYSQL_CONFIG,
+    REDIS_URL: env.REDIS_URL,
 };
 export default envExport;
