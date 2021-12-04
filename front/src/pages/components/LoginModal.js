@@ -1,5 +1,6 @@
 import shortLogo from "../../assets/RM_ShortLogo.png";
 import React, {useCallback, useState} from "react";
+import { useHistory } from 'react-router-dom';
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import {loginAction} from "../../module/user";
@@ -8,6 +9,7 @@ import useInput from "../../hooks/useInput";
 
 const LoginModal = ({changeState}) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
 
@@ -22,6 +24,7 @@ const LoginModal = ({changeState}) => {
                         }),
                     );
                     alert('로그인 성공!');
+                    history.push('/Lobby');
                 } catch (err) {
                     console.error("에러:" + err);
                     alert('로그인에 실패했습니다!');
@@ -34,11 +37,18 @@ const LoginModal = ({changeState}) => {
         [id, password],
     );
 
+    const onLoginKeyPress = (e) => {
+        console.log(e.key);
+        if (e.key === 'Enter') {
+            onLogin();
+        }
+    };
+
     return (
         <>
             <img src={shortLogo} alt="shortLogo" style={ShortLogo}/>
             <CustomInput value={id} onChange={onChangeId} placeholder="아이디"/>
-            <CustomInput value={password} onChange={onChangePassword} placeholder="비밀번호" type="password"/>
+            <CustomInput value={password} onChange={onChangePassword} onKeyPress={onLoginKeyPress} placeholder="비밀번호" type="password"/>
             <CustomButton bgcolor="#63A4DF" color="#FFFFFF" onClick={onLogin}>로그인</CustomButton>
             <CustomButton bgcolor="#FFFFFF" color="#63A4DF" onClick={changeState}>회원가입</CustomButton>
         </>
