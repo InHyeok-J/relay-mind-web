@@ -13,7 +13,7 @@ export class Player {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('varchar', { length: '20' })
+    @Column('varchar', { length: '20', nullable: true })
     keyword: string;
 
     @Column({ default: false })
