@@ -6,7 +6,7 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import * as RedisStore from 'connect-redis';
 import 'reflect-metadata';
-import { logHandler, errorHandler } from './middleware/errorHandler';
+import { errorHandler } from './middleware/errorHandler';
 import env from './configs';
 import routes from './routes';
 import { createConnection } from 'typeorm';
@@ -48,8 +48,7 @@ app.use(passport.session());
 //All router
 app.use('/', routes);
 
-//Error Log and Handler
-app.use(logHandler);
+//Error Handler
 app.use(errorHandler);
 
 app.get('/', (req, res, next) => {

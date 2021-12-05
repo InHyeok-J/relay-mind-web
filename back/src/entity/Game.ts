@@ -7,11 +7,18 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import {
+    IsBoolean,
+    IsEnum,
+    IsOptional,
+    IsString,
+    Length,
+} from 'class-validator';
 
-export enum status {
-    'Open',
-    'Gaming',
-    'Close',
+export enum gameStatus {
+    open = 'Open',
+    gaming = 'Gaming',
+    close = 'Close',
 }
 
 @Entity()
@@ -20,20 +27,26 @@ export class Game {
     id: number;
 
     @Column('varchar', { length: 50 })
+    @IsString()
+    @Length(1, 30)
     title: string;
 
     @Column({
         type: 'enum',
-        enum: status,
+        enum: gameStatus,
     })
-    status: status;
+    @IsEnum(gameStatus)
+    status: gameStatus;
 
     @Column({ type: 'varchar', nullable: true, length: 100 })
+    @IsOptional()
+    @IsString()
     password: string;
 
     @Column({
         default: false,
     })
+    @IsBoolean()
     isSecret: Boolean;
 
     @OneToMany(() => Player, (player) => player.gameRoom)
