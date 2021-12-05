@@ -1,6 +1,11 @@
 version: '3.7'
 
 services:
+    redis-server:
+        container_name: redis
+        image: 'redis'
+        ports:
+            - 7379:6379
     app:
         container_name: relay-mind
         build:
