@@ -1,10 +1,13 @@
 import React from "react";
 import styled from 'styled-components';
+import {useHistory} from "react-router-dom";
 
 function DisplayRoomComponent({isOpen, roomNumber}) {
+    const history = useHistory();
+
     if (isOpen)
         return (
-            <RoomComponentButton bgcolor="#cccccc" hoverColor="#dddddd" activeColor="#bbbbbb" onClick={() => alert("방에 참여합니다.")}>
+            <RoomComponentButton bgcolor="#cccccc" hoverColor="#dddddd" activeColor="#bbbbbb" onClick={() => history.push('/GameRoom')}>
                 <p>#{roomNumber}</p>
                 <p>입장 인원 : 6 / 6</p>
             </RoomComponentButton>
