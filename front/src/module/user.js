@@ -20,6 +20,7 @@ const initialState = {
     signup: null,
     logout: null,
     user: null,
+    data: null,
     error: null,
 };
 
