@@ -19,7 +19,8 @@
         "noImplicitReturns": true,
         "strictPropertyInitialization": false,
         "noFallthroughCasesInSwitch": true,
-        "strictNullChecks": false
+        "strictNullChecks": false,
+        "noImplicitAny": false
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules", "test/**/*.ts"],

@@ -1,8 +1,8 @@
 import { isNotLoggedIn, isLoggedIn } from './../middleware/authHandler';
-import * as express from 'express';
+import { Router } from 'express';
 import { signUp, login, logout, getUser } from '../controllers/user';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/', getUser);
 router.post('/signup', isNotLoggedIn, signUp);
