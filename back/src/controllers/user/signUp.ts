@@ -39,7 +39,7 @@ export const signUp = catchAsync(async (req, res, next) => {
     if (errors.length > 0) {
         const customError = new CustomError(
             401,
-            'validate',
+            'Validate',
             'Validation Failed',
             errors
         );
@@ -52,7 +52,7 @@ export const signUp = catchAsync(async (req, res, next) => {
     } catch (err) {
         const customError = new CustomError(
             500,
-            'unknown',
+            'Unknown',
             'databaseError',
             err
         );

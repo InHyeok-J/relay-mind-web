@@ -7,7 +7,7 @@ export const login = catchAsync(async (req, res, next) => {
         if (err) {
             const customError = new CustomError(
                 500,
-                'session',
+                'Session',
                 'passportError',
                 err
             );
@@ -16,7 +16,7 @@ export const login = catchAsync(async (req, res, next) => {
         if (!user) {
             const customError = new CustomError(
                 401,
-                'exits',
+                'Exist',
                 info.message,
                 err
             );
@@ -26,7 +26,7 @@ export const login = catchAsync(async (req, res, next) => {
             if (err) {
                 const customError = new CustomError(
                     500,
-                    'session',
+                    'Session',
                     'passportError',
                     err
                 );

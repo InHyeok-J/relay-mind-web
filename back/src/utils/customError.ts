@@ -1,6 +1,6 @@
 export class CustomError extends Error {
     private httpStatusCode: number;
-    private errorType: any;
+    private errorType: ErrorType;
     private rawError: any;
 
     constructor(
@@ -20,12 +20,25 @@ export class CustomError extends Error {
         return this.httpStatusCode;
     }
 
-    get JSON() {
+    get JSON(): ErrorResponse {
         return {
             errorType: this.errorType,
             message: this.message,
             rawError: this.rawError,
-            stack: this.stack,
         };
     }
 }
+
+export type ErrorType =
+    | 'Unknown'
+    | 'Validate'
+    | 'Exist'
+    | 'Not Exist'
+    | 'Unauthorized'
+    | 'Session';
+
+export type ErrorResponse = {
+    errorType: ErrorType;
+    message: string;
+    rawError: any;
+};

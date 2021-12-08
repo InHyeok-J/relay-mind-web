@@ -9,7 +9,7 @@ export const logout = catchAsync(
             if (err) {
                 const customError = new CustomError(
                     500,
-                    'session',
+                    'Session',
                     'sessionError',
                     err
                 );

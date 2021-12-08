@@ -7,7 +7,7 @@ const router = Router();
 
 //user
 router.use('/api/user', userRouter);
-//room
+//game
 router.use('/api/game', gameRouter);
 //404 Router Handler
 router.use(NotFoundRouter);
