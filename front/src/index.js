@@ -8,24 +8,35 @@ import penderMiddleware from 'redux-pender';
 import logger from 'redux-logger';
 import rootReducer from './module';
 import { Provider } from "react-redux";
+import { persistReducer, persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from 'redux-persist/lib/storage';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+const persistConfig = {
+    key: 'root',
+    storage
+}
+
+const persisted = persistReducer(persistConfig, rootReducer)
+
 const store = createStore(
-    rootReducer,
+    persisted,
     composeEnhancers(applyMiddleware(penderMiddleware(), logger)),
 );
 
+const persistor = persistStore(store)
+
 ReactDOM.render(
     <Provider store={store}>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
+      <PersistGate persistor={persistor}>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+      </PersistGate>
     </Provider>,
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
