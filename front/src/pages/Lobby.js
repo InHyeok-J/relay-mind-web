@@ -1,10 +1,14 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styled from 'styled-components';
 import fullLogo from '../assets/RM_FullLogo.png';
 import paperBackground from '../assets/Bg_paperTexture.jpg';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
-import RoomComponent from "./components/RoomComponent";
+import { logoutAction, getUserAction } from "../module/user";
+import { getGameListAction } from "../module/game";
+import displayRoomList from "./components/RoomListComponent"
+import Modal from "react-modal";
+import CreateRoomModal from "./components/CreateRoomModal";
 
 const onInfo = () => {
     alert("내 정보 확인은 준비중입니다.");
@@ -64,15 +68,6 @@ const RoomCreateButton = styled.button`
     }
 `
 
-const RoomList = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    width: calc(100% - 1vw);
-    height: calc(95vh - 40px - 1vh);
-    padding: .5vh .5vw;
-    background-color: rgba(255, 255, 255, 0.3);
-`
-
 const FullLogo = {
     width: "90%",
     margin: ".5rem auto"
@@ -85,21 +80,62 @@ const userName = {
     fontSize: "1.2rem"
 }
 
-function LobbyComponent() {
-    const { user: userData } = useSelector((state) => state.user);
-    const history = useHistory();
-
-    if(!userData) {
-        alert("로그인이 필요합니다!");
-        history.push('/');
+const modalStyle = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: '#FFFFFF'
     }
+};
 
+const LobbyComponent = (callback, deps) => {
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const {user: userData} = useSelector((state) => state.user);
+    const {data: gameData} = useSelector((state) => state.game);
+
+    console.log(userData);
+    useEffect(async() => {
+        await dispatch(getUserAction());
+        await dispatch(getGameListAction());
+    },[])
+
+    const onLogout = useCallback(
+        async (e) => {
+        try {
+            await dispatch(
+                logoutAction(),
+            );
+            alert('로그아웃 되었습니다.');
+            history.push("/");
+        } catch (err) {
+            console.error("에러:" + err);
+            alert('로그아웃 실패');
+        }
+    }, []);
+
+    console.log(gameData);
+    /*
+    if(!userData) {
+        alert("로그인이 필요합니다.");
+        history.push("/");
+    }
+    if(!gameData) return <div>로딩중..</div>
+    */
     return (
         <Lobby>
+            <Modal isOpen={modalIsOpen} style={modalStyle} onRequestClose={() => setModalIsOpen(false)}>
+                <CreateRoomModal/>
+            </Modal>
             <Sidebar>
                 <img src={fullLogo} alt="FullLogo" style={FullLogo}/>
                 <MyInfo onClick={onInfo}>
-                    <span className="material-icons">brush</span><p style={userName}>{userData.nickname}</p>
+                    <span className="material-icons">brush</span><p style={userName}> {(userData) ? userData.nickname : ""}</p>
                 </MyInfo>
                 <PlayerList>
                     <p><strong>접속자 목록</strong></p>
@@ -108,16 +144,11 @@ function LobbyComponent() {
             </Sidebar>
             <RoomContents>
                 <ButtonWrapper>
-                    <RoomCreateButton bgcolor="#FFCCCC" hoverColor="#FFDDDD" activeColor="#FFBBBB" onClick={() => alert("방만들기 클릭")}>방만들기</RoomCreateButton>
-                    <RoomCreateButton bgcolor="#AAEBFF" hoverColor="#BBFCFF" activeColor="#99DAFF" onClick={() => alert("새로고침 클릭")}>새로고침</RoomCreateButton>
+                    <RoomCreateButton bgcolor="#FFCCCC" hoverColor="#FFDDDD" activeColor="#FFBBBB" onClick={() => setModalIsOpen(true)}>방만들기</RoomCreateButton>
+                    <RoomCreateButton bgcolor="#AAEBFF" hoverColor="#BBFCFF" activeColor="#99DAFF" onClick={async() => { await dispatch(getGameListAction())}}>새로고침</RoomCreateButton>
+                    <RoomCreateButton bgcolor="#c7aaff" hoverColor="#dfcfff" activeColor="#916bdd" onClick={onLogout}>로그아웃</RoomCreateButton>
                 </ButtonWrapper>
-                <RoomList>
-                    <RoomComponent isOpen={false} roomNumber="1"/>
-                    <RoomComponent isOpen={true} roomNumber="2"/>
-                    <RoomComponent isOpen={true} roomNumber="3"/>
-                    <RoomComponent isOpen={true} roomNumber="4"/>
-                    <RoomComponent isOpen={true} roomNumber="5"/>
-                </RoomList>
+                {gameData ? displayRoomList(gameData) : "로딩중"}
             </RoomContents>
         </Lobby>
     );

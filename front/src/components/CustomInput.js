@@ -18,6 +18,7 @@ const CustomInput = (props) => {
             placeholder={props.placeholder}
             type={props.type}
             onChange={props.onChange}
+            onKeyPress={props.onKeyPress}
         />
     );
 };
