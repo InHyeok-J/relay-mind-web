@@ -144,6 +144,7 @@ function MainComponent() {
                 isOpen={modalIsOpen}
                 style={modalStyle}
                 onRequestClose={() => setModalIsOpen(false)}
+                ariaHideApp={false}
             >
                 <LoginModal />
             </Modal>
