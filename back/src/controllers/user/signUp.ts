@@ -38,7 +38,7 @@ export const signUp = catchAsync(async (req, res, next) => {
     const errors = await validate(newUser);
     if (errors.length > 0) {
         const customError = new CustomError(
-            401,
+            400,
             'Validate',
             'Validation Failed',
             errors

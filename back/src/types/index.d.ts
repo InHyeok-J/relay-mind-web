@@ -18,3 +18,8 @@ declare global {
         }
     }
 }
+declare module 'node:http' {
+    interface IncomingMessage {
+        user: IUser;
+    }
+}

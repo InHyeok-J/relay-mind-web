@@ -5,11 +5,13 @@ import { getRepository } from 'typeorm';
 
 export default () => {
     passport.serializeUser((user, done) => {
+        console.log('serializeUser---------');
         done(null, user.id);
     });
 
     passport.deserializeUser<number>(async (id, done) => {
         try {
+            console.log('deserializeUser---------', id);
             const userRepository = getRepository(User);
             const user = await userRepository.findOne({ where: { id } });
             if (!user) {
