@@ -26,7 +26,7 @@ export const createGame = catchAsync(
         const errors = await validate(game);
         if (errors.length > 0) {
             const customError = new CustomError(
-                401,
+                400,
                 'Validate',
                 'Validation Failed',
                 errors

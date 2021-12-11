@@ -15,7 +15,7 @@ export const login = catchAsync(async (req, res, next) => {
         }
         if (!user) {
             const customError = new CustomError(
-                401,
+                400,
                 'Exist',
                 info.message,
                 err

@@ -55,6 +55,9 @@ export class Game {
     @CreateDateColumn()
     createdAt: Date;
 
+    @Column({ type: 'datetime', nullable: true })
+    updatedAt: Date;
+
     hashPassword() {
         this.password = bcrypt.hashSync(this.password, 10);
     }

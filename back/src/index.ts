@@ -31,16 +31,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser(env.COOKIE_SECRET));
-app.use(
-    session({
-        secret: env.COOKIE_SECRET!,
-        resave: false,
-        saveUninitialized: false,
-        store: new redisSession({
-            client: client,
-        }),
-    })
-);
+export const sessionMiddleware = session({
+    secret: env.COOKIE_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    store: new redisSession({
+        client: client,
+    }),
+});
+app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());
