@@ -4,6 +4,7 @@ import fullLogo from '../assets/RM_FullLogo.png';
 import paperBackground from '../assets/Bg_paperTexture.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import SocketClient from 'socket.io-client';
 import { logoutAction, getUserAction } from '../module/user';
 import { getGameListAction } from '../module/game';
 import displayRoomList from './components/RoomListComponent';
@@ -94,14 +95,31 @@ const LobbyComponent = (callback, deps) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [userList, setUserList] = useState(null);
     const { user: userData } = useSelector((state) => state.user);
     const { data: gameData } = useSelector((state) => state.game);
-
-    console.log(userData);
+    let io;
     useEffect(async () => {
-        await dispatch(getUserAction());
         await dispatch(getGameListAction());
     }, []);
+
+    useEffect(() => {
+        io = SocketClient('http://localhost:4000/relayMind', {
+            transports: ['websocket'],
+        });
+        io.on('userList', (data) => {
+            console.log(data);
+            setUserList(data.userList);
+        });
+        console.log('Socket Init');
+    }, []);
+
+    useEffect(() => {
+        io.on('userList', (data) => {
+            console.log(data);
+            setUserList(data.userList);
+        });
+    }, [io]);
 
     const onLogout = useCallback(async (e) => {
         try {
@@ -114,7 +132,7 @@ const LobbyComponent = (callback, deps) => {
         }
     }, []);
 
-    console.log(gameData);
+    if (!gameData || !userData) return null;
 
     return (
         <Lobby>
@@ -129,13 +147,19 @@ const LobbyComponent = (callback, deps) => {
                 <img src={fullLogo} alt="FullLogo" style={FullLogo} />
                 <MyInfo onClick={onInfo}>
                     <span className="material-icons">brush</span>
-                    <p style={userName}> {userData ? userData.nickname : ''}</p>
+                    <p style={userName}> {userData.nickname}</p>
                 </MyInfo>
                 <PlayerList>
                     <p>
                         <strong>접속자 목록</strong>
                     </p>
-                    DummyUser123
+                    {userList ? (
+                        userList.map((user) => (
+                            <div key={user.nickname}>{user}</div>
+                        ))
+                    ) : (
+                        <>DummyUser123</>
+                    )}
                 </PlayerList>
             </Sidebar>
             <RoomContents>
