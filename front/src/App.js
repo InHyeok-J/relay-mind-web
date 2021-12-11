@@ -11,9 +11,13 @@ function App() {
         <div className="App">
             <Router>
                 <Switch>
-                    <Route exact path="/" component={Main} />
-                    <Route exact path="/Lobby" component={Auth(Lobby)} />
-                    <Route exact path="/GameRoom" component={Auth(GameRoom)} />
+                    <Route exact path="/" component={Auth(Main, false)} />
+                    <Route exact path="/Lobby" component={Auth(Lobby, true)} />
+                    <Route
+                        exact
+                        path="/GameRoom"
+                        component={Auth(GameRoom, true)}
+                    />
                 </Switch>
             </Router>
         </div>
