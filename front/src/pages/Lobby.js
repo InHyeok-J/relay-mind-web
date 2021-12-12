@@ -105,7 +105,7 @@ const LobbyComponent = (callback, deps) => {
     }, []);
 
     useEffect(() => {
-        io = SocketClient('http://localhost:4000/relayMind', {
+        io = SocketClient('/relayMind', {
             transports: ['websocket'],
         });
         io.on('userList', (data) => {

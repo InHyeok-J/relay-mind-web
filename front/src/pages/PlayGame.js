@@ -4,6 +4,9 @@ import fullLogo from '../assets/RM_FullLogo.png';
 import paperBackground from '../assets/Bg_paperTexture.jpg';
 import {useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
+import Notice from "./components/Notice";
+import Palate from "./components/Palate";
+import Sketch from "./components/Sketch";
 
 const InGame = styled.div`
     width: 100vw;
@@ -97,6 +100,7 @@ const FullLogo = {
 
 function GameRoom() {
     const { user: userData } = useSelector((state) => state.user);
+    const [color, setColor] = useState("black");
     const history = useHistory();
 
     if(!userData) {
@@ -109,21 +113,13 @@ function GameRoom() {
             <Sidebar>
                 <img src={fullLogo} alt="FullLogo" style={FullLogo}/>
                 <ChatDiv>
-                    <span>{userData.nickname}님이 방에 입장했습니다!</span>
                 </ChatDiv>
                 <ChatInput/>
             </Sidebar>
             <RoomMain>
-                <UserInRoom>1 / 6</UserInRoom>
-                <UserList>
-                    <UserComponent>
-                        <userNickname>DummyUser001</userNickname>
-                    </UserComponent>
-                </UserList>
-                <RoomMenu>
-                    <RoomButton bgcolor="#AAEBFF" hoverColor="#BBFCFF" activeColor="#99DAFF" onClick={() => history.push("/PlayGame")}>게임시작</RoomButton>
-                    <RoomButton bgcolor="#FFCCCC" hoverColor="#FFDDDD" activeColor="#FFBBBB" onClick={() => history.push("/Lobby")}>나가기</RoomButton>
-                </RoomMenu>
+                <Notice content="종강"/>
+                <Palate changeColors={setColor}/>
+                <Sketch color={color}/>
             </RoomMain>
         </InGame>
     );
