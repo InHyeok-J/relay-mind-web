@@ -96,6 +96,7 @@ const LobbyComponent = (callback, deps) => {
     const dispatch = useDispatch();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [userList, setUserList] = useState(null);
+    const [socketError, setSocketError] = useState(null);
     const { user: userData } = useSelector((state) => state.user);
     const { data: gameData } = useSelector((state) => state.game);
     let io;
@@ -116,6 +117,10 @@ const LobbyComponent = (callback, deps) => {
     useEffect(() => {
         io.on('userList', (data) => {
             setUserList(data.userList);
+        });
+        io.on('socketError', (data) => {
+            console.error(data);
+            setSocketError(data);
         });
     }, [io]);
 
