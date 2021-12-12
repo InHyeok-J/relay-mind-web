@@ -1,13 +1,13 @@
-import React, {useCallback, useState} from "react";
-import CustomInput from "../../components/CustomInput";
-import CustomButton from "../../components/CustomButton";
-import {useDispatch, useSelector} from "react-redux";
-import {signUpAction, signUpCleanAction} from "../../module/user";
-import styled from "styled-components";
-import useInput from "../../hooks/useInput";
-import {checkValidation} from "../../utils/RegExpCheck";
+import React, { useCallback, useState } from 'react';
+import CustomInput from '../../components/CustomInput';
+import CustomButton from '../../components/CustomButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUpAction, signUpCleanAction } from '../../module/user';
+import styled from 'styled-components';
+import useInput from '../../hooks/useInput';
+import { checkValidation } from '../../utils/RegExpCheck';
 
-const RegisterModal = ({changeState}) => {
+const RegisterModal = ({ changeState }) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
     const { error } = useSelector((state) => state.user);
@@ -82,7 +82,7 @@ const RegisterModal = ({changeState}) => {
                         password,
                     }),
                 );
-                alert("회원가입에 성공했습니다. 다시 로그인해주세요.");
+                alert('회원가입에 성공했습니다. 다시 로그인해주세요.');
                 changeState();
             } catch (err) {
                 alert(error.response.data.message);
@@ -100,29 +100,60 @@ const RegisterModal = ({changeState}) => {
     return (
         <>
             <h3>회원가입</h3>
-            <CustomInput value={id || ''} onChange={onChangeId} placeholder="아이디" required/>
-            {lastIdCheck ?
-                (<GuideText color="red">아이디는 6~20자 사이의 영문+숫자여야합니다.</GuideText>) :
-                (<GuideText>아이디는 6~20자 사이의 영문+숫자여야합니다.</GuideText>)
-            }
-            <CustomInput value={password || ''} onChange={onChangePassword} placeholder="비밀번호" type="password" required/>
-            <GuideText>비밀번호는 6~20자 사이의 영문+숫자여야합니다.</GuideText>
-            <CustomInput value={passwordCheck || ''} onChange={onChangePasswordCheck} placeholder="비밀번호 확인" type="password" required/>
-            {lastPasswordCheck && (
+            <CustomInput
+                value={id || ''}
+                onChange={onChangeId}
+                placeholder="아이디"
+                required
+            />
+            {lastIdCheck ? (
                 <GuideText color="red">
-                    비밀번호를 다시 확인해주세요.
+                    아이디는 6~20자 사이의 영문+숫자여야합니다.
+                </GuideText>
+            ) : (
+                <GuideText>
+                    아이디는 6~20자 사이의 영문+숫자여야합니다.
                 </GuideText>
             )}
-            <CustomInput value={nickname || ''} onChange={onChangeNickname} placeholder="닉네임" onKeyPress={onSignUpKeyPress} required/>
-            <GuideText>부적절한 닉네임은 별도의 안내없이 변경될 수 있으며, <br/> 원활한 게임 이용에 제한을 받을 수 있습니다.</GuideText>
-            <CustomButton bgcolor="#63A4DF" color="#FFFFFF" onClick={onSignUp}>확인</CustomButton>
+            <CustomInput
+                value={password || ''}
+                onChange={onChangePassword}
+                placeholder="비밀번호"
+                type="password"
+                required
+            />
+            <GuideText>비밀번호는 6~20자 사이의 영문+숫자여야합니다.</GuideText>
+            <CustomInput
+                value={passwordCheck || ''}
+                onChange={onChangePasswordCheck}
+                placeholder="비밀번호 확인"
+                type="password"
+                required
+            />
+            {lastPasswordCheck && (
+                <GuideText color="red">비밀번호를 다시 확인해주세요.</GuideText>
+            )}
+            <CustomInput
+                value={nickname || ''}
+                onChange={onChangeNickname}
+                placeholder="닉네임"
+                onKeyPress={onSignUpKeyPress}
+                required
+            />
+            <GuideText>
+                부적절한 닉네임은 별도의 안내없이 변경될 수 있으며, <br />{' '}
+                원활한 게임 이용에 제한을 받을 수 있습니다.
+            </GuideText>
+            <CustomButton bgcolor="#63A4DF" color="#FFFFFF" onClick={onSignUp}>
+                확인
+            </CustomButton>
         </>
-    )
-}
+    );
+};
 
 export default RegisterModal;
 
 const GuideText = styled.p`
-    color: ${props => props.color || "#cccccc"};
-    font-size: .8rem;
+    color: ${(props) => props.color || '#cccccc'};
+    font-size: 0.8rem;
 `;

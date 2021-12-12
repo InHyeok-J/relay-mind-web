@@ -7,6 +7,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.24.0",
+    "dotenv": "^10.0.0",
     "http-proxy-middleware": "^2.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -20,6 +21,7 @@
     "redux-logger": "^3.0.6",
     "redux-pender": "^2.0.12",
     "redux-persist": "^6.0.0",
+    "socket.io-client": "^4.4.0",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.0.1"
   },
