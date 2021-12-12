@@ -12,15 +12,15 @@ const RoomList = styled.div`
 `;
 
 const displayRoomList = (props) => {
-    console.log(props);
     return (
         <RoomList>
-            {props.map((props) => (
+            {props.map((data) => (
                 <RoomComponent
-                    key={props.id}
+                    key={data.id}
                     isOpen={true}
-                    roomNumber={props.id}
-                    title={props.title}
+                    roomNumber={data.id}
+                    title={data.title}
+                    isSecret={data.isSecret}
                 />
             ))}
         </RoomList>

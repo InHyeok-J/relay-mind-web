@@ -108,7 +108,6 @@ const LobbyComponent = (callback, deps) => {
             transports: ['websocket'],
         });
         io.on('userList', (data) => {
-            console.log(data);
             setUserList(data.userList);
         });
         console.log('Socket Init');
@@ -116,7 +115,6 @@ const LobbyComponent = (callback, deps) => {
 
     useEffect(() => {
         io.on('userList', (data) => {
-            console.log(data);
             setUserList(data.userList);
         });
     }, [io]);
@@ -131,7 +129,6 @@ const LobbyComponent = (callback, deps) => {
             alert('로그아웃 실패');
         }
     }, []);
-
     if (!gameData || !userData) return null;
 
     return (
@@ -140,6 +137,7 @@ const LobbyComponent = (callback, deps) => {
                 isOpen={modalIsOpen}
                 style={modalStyle}
                 onRequestClose={() => setModalIsOpen(false)}
+                ariaHideApp={false}
             >
                 <CreateRoomModal />
             </Modal>
@@ -154,8 +152,8 @@ const LobbyComponent = (callback, deps) => {
                         <strong>접속자 목록</strong>
                     </p>
                     {userList ? (
-                        userList.map((user) => (
-                            <div key={user.nickname}>{user}</div>
+                        userList.map((user, index) => (
+                            <div key={index}>{user}</div>
                         ))
                     ) : (
                         <>DummyUser123</>
