@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory, withRouter } from 'react-router';
 import { getUserAction } from '../module/user';
 
 export default function Auth(SpecificComponent, check) {

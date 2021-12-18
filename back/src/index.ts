@@ -14,6 +14,7 @@ import ConnectionOptions from './database/ormconfig';
 import passportConfig from './configs/passport';
 import client from './database/redisClient';
 import './utils/customReponse';
+import { promisify } from 'util';
 
 const app = express();
 const redisSession = RedisStore(session);
