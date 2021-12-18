@@ -10,3 +10,16 @@ export const setUserList = promisify((data, cb) =>
 export const delUserList = promisify((data, cb) =>
     client.srem('userList', data, (err, ...results) => cb(err, results))
 ).bind(client);
+
+export const HashSetAsync = promisify((key, subkey, value, cb) =>
+    client.hmset(key, subkey, value, (err, ...results) => cb(err, results))
+).bind(client);
+export const HashGetALLAsync = promisify(client.hgetall).bind(client);
+
+export const HashGetOneAsync = promisify((key, subkey, cb) =>
+    client.hget(key, subkey, (err, ...results) => cb(err, results))
+).bind(client);
+
+export const HashDelAsync = promisify((key, subkey, cb) =>
+    client.hdel(key, subkey, (err, ...results) => cb(err, results))
+).bind(client);

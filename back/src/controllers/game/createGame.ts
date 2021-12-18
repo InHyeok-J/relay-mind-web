@@ -1,3 +1,4 @@
+import { HashSetAsync } from './../../utils/redisAsync';
 import { Player } from './../../entity/Player';
 import { User } from './../../entity/User';
 import { CustomError } from './../../utils/customError';
@@ -46,7 +47,9 @@ export const createGame = catchAsync(
             newPlayer.gameRoom = createdGame;
             newPlayer.player = user;
 
-            playerRepository.save(newPlayer);
+            await playerRepository.save(newPlayer);
+            await HashSetAsync('gameUserCountList', createdGame.id, 0);
+
             return res.customSuccess(201, '게임 생성 성공');
         } catch (err) {
             const customError = new CustomError(

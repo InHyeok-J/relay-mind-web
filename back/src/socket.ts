@@ -1,4 +1,12 @@
-import { setUserList, getUserList, delUserList } from './utils/redisAsync';
+import {
+    setUserList,
+    getUserList,
+    delUserList,
+    HashGetOneAsync,
+    HashGetALLAsync,
+    HashSetAsync,
+    HashDelAsync,
+} from './utils/redisAsync';
 import { Server } from 'socket.io';
 import * as passport from 'passport';
 import { sessionMiddleware } from './index';
@@ -36,11 +44,65 @@ export default (server, app) => {
     newNameSpace.on('connection', async (socket) => {
         try {
             console.log(socket.nsp.name + '연결 성공');
-            const { nickname } = socket.request.user;
+            const { nickname, id } = socket.request.user;
             await setUserList(nickname);
             const updateUserList = await getUserList('userList');
-
+            const gameUserCountList = await HashGetALLAsync(
+                'gameUserCountList'
+            );
+            newNameSpace.emit('gameList', { gameList: gameUserCountList });
             newNameSpace.emit('userList', { userList: updateUserList });
+
+            socket.on('join', async (roomId) => {
+                console.log(nickname, '이 방에 들어왔습니다.');
+
+                const roomUser = await HashGetOneAsync(
+                    `room-${roomId}`,
+                    nickname
+                );
+                console.log(roomUser);
+                if (!roomUser[0]) {
+                    let roomCount = await HashGetOneAsync(
+                        `gameUserCountList`,
+                        roomId
+                    );
+                    console.log('룸카운터', roomCount);
+                    let count = parseInt(roomCount.toString());
+                    await HashSetAsync(`room-${roomId}`, nickname, id);
+
+                    await HashSetAsync('gameUserCountList', roomId, ++count);
+                    if (count > 6) {
+                        socket.emit('socketError', { isFull: true });
+                        return;
+                    }
+                }
+
+                const roomUserList = await HashGetALLAsync(`room-${roomId}`);
+                socket.join(`room-${roomId}`);
+                newNameSpace
+                    .to(`room-${roomId}`)
+                    .emit('joinResponse', { roomUserList });
+            });
+
+            socket.on('leave', async (roomId) => {
+                console.log(nickname, '이 방을 떠났습니다');
+                await HashDelAsync(`room-${roomId}`, nickname);
+                const roomCount = await HashGetOneAsync(
+                    `gameUserCountList`,
+                    roomId
+                );
+                let count = parseInt(roomCount.toString());
+                if (count != 0) {
+                    --count;
+                }
+                await HashSetAsync('gameUserCountList', roomId, count);
+
+                const roomUserList = await HashGetALLAsync(`room-${roomId}`);
+                socket.leave(`room-${roomId}`);
+                newNameSpace
+                    .to(`room-${roomId}`)
+                    .emit('joinResponse', { roomUserList });
+            });
 
             socket.on('disconnect', async () => {
                 const findUserList = await getUserList('userList');
