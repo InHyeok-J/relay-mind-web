@@ -6,11 +6,15 @@ const GET_GAMELIST = 'game/GET_GAMELIST';
 const INIT_GAMELIST = 'game/INIT_GAMELIST';
 const CREATE_GAMEROOM = 'game/CREATE_GAMEROOM';
 const CHECK_PASSWORD = 'game/CHECK_PASSWORD';
-
+const GET_GAME_INFO = 'game/GET_GAME_INFO';
 export const gameCleanAction = createAction(INIT_GAMELIST);
 export const getGameListAction = createAction(
     GET_GAMELIST,
     gameApi.getGameList,
+);
+export const getGameInfoAction = createAction(
+    GET_GAME_INFO,
+    gameApi.getGameInfo,
 );
 export const CreateGameRoomAction = createAction(
     CREATE_GAMEROOM,
@@ -23,6 +27,7 @@ export const checkGamePasswordAction = createAction(
 
 const initialState = {
     data: null,
+    game: null,
     error: null,
 };
 
@@ -63,6 +68,17 @@ export default handleActions(
         }),
         ...pender({
             type: CHECK_PASSWORD,
+            onFailure: (state, { payload }) => ({
+                ...state,
+                error: payload,
+            }),
+        }),
+        ...pender({
+            type: GET_GAME_INFO,
+            onSuccess: (state, { payload }) => ({
+                ...state,
+                game: payload,
+            }),
             onFailure: (state, { payload }) => ({
                 ...state,
                 error: payload,

@@ -20,7 +20,7 @@ const PasswordCheckModal = ({ roomNumber }) => {
                 }),
             );
             alert('패스워드 일치!');
-            history.push('/gameRoom');
+            history.push(`/GameRoom/${roomNumber}`);
         } catch (err) {
             console.error(err);
             alert('패스워드 불일치!');

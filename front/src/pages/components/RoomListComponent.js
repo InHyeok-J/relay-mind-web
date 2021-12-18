@@ -11,16 +11,17 @@ const RoomList = styled.div`
     background-color: rgba(255, 255, 255, 0.3);
 `;
 
-const displayRoomList = (props) => {
+const displayRoomList = (gameData, gameCountList) => {
     return (
         <RoomList>
-            {props.map((data) => (
+            {gameData.map((data) => (
                 <RoomComponent
                     key={data.id}
                     isOpen={true}
                     roomNumber={data.id}
                     title={data.title}
                     isSecret={data.isSecret}
+                    gameCountList={gameCountList}
                 />
             ))}
         </RoomList>

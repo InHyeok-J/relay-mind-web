@@ -4,14 +4,20 @@ import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
 import PasswordCheckModal from './PasswordCheckModal';
 
-function DisplayRoomComponent({ isOpen, roomNumber, title, isSecret }) {
+function DisplayRoomComponent({
+    isOpen,
+    roomNumber,
+    title,
+    isSecret,
+    currentMemberCount,
+}) {
     const history = useHistory();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const onClickButton = async () => {
         if (isSecret) {
             setModalIsOpen(true);
         } else {
-            history.push('/gameRoom');
+            history.push(`/GameRoom/${roomNumber}`);
         }
     };
     if (isOpen)
@@ -34,7 +40,7 @@ function DisplayRoomComponent({ isOpen, roomNumber, title, isSecret }) {
                     <span>#{roomNumber}</span>
                     {isSecret && <span style={{ color: 'red' }}>비밀방</span>}
                     <RoomDataP>{title}</RoomDataP>
-                    <span>2 / 6</span>
+                    <span>{currentMemberCount} / 6</span>
                 </RoomComponentButton>
             </>
         );
@@ -53,13 +59,20 @@ function DisplayRoomComponent({ isOpen, roomNumber, title, isSecret }) {
         );
 }
 
-function RoomComponent({ isOpen, roomNumber, title, isSecret }) {
+function RoomComponent({ isOpen, roomNumber, title, isSecret, gameCountList }) {
+    console.log(gameCountList);
+    let CountKey;
+    for (let key in gameCountList) {
+        if (roomNumber.toString() === key.toString()) CountKey = key;
+    }
+    const currentMemberCount = gameCountList[CountKey];
     return (
         <DisplayRoomComponent
             isOpen={isOpen}
             roomNumber={roomNumber}
             title={title}
             isSecret={isSecret}
+            currentMemberCount={currentMemberCount}
         />
     );
 }

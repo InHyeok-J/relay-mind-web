@@ -10,6 +10,7 @@ import { getGameListAction } from '../module/game';
 import displayRoomList from './components/RoomListComponent';
 import Modal from 'react-modal';
 import CreateRoomModal from './components/CreateRoomModal';
+import { setSocketAction } from '../module/socket';
 
 const onInfo = () => {
     alert('내 정보 확인은 준비중입니다.');
@@ -96,33 +97,39 @@ const LobbyComponent = (callback, deps) => {
     const dispatch = useDispatch();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [userList, setUserList] = useState(null);
+    const [gameCountList, setGameCountList] = useState(null);
     const [socketError, setSocketError] = useState(null);
     const { user: userData } = useSelector((state) => state.user);
     const { data: gameData } = useSelector((state) => state.game);
-    let io;
+    const { socket } = useSelector((state) => state.socket);
+
     useEffect(async () => {
         await dispatch(getGameListAction());
+        dispatch(setSocketAction());
     }, []);
+    let io;
+    useEffect(() => {
+        if (socket) {
+            socket.on('userList', (data) => {
+                setUserList(data.userList);
+            });
+        }
+    }, [socket]);
 
     useEffect(() => {
-        io = SocketClient('/relayMind', {
-            transports: ['websocket'],
-        });
-        io.on('userList', (data) => {
-            setUserList(data.userList);
-        });
-        console.log('Socket Init');
-    }, []);
-
-    useEffect(() => {
-        io.on('userList', (data) => {
-            setUserList(data.userList);
-        });
-        io.on('socketError', (data) => {
-            console.error(data);
-            setSocketError(data);
-        });
-    }, [io]);
+        if (socket) {
+            socket.on('userList', (data) => {
+                setUserList(data.userList);
+            });
+            socket.on('gameList', (data) => {
+                setGameCountList(data.gameList);
+            });
+            socket.on('socketError', (data) => {
+                console.error(data);
+                setSocketError(data);
+            });
+        }
+    }, [socket]);
 
     const onLogout = useCallback(async (e) => {
         try {
@@ -134,7 +141,6 @@ const LobbyComponent = (callback, deps) => {
             alert('로그아웃 실패');
         }
     }, []);
-    if (!gameData || !userData) return null;
 
     return (
         <Lobby>
@@ -194,7 +200,9 @@ const LobbyComponent = (callback, deps) => {
                         로그아웃
                     </RoomCreateButton>
                 </ButtonWrapper>
-                {gameData ? displayRoomList(gameData) : '로딩중'}
+                {gameData && gameCountList
+                    ? displayRoomList(gameData, gameCountList)
+                    : '로딩중'}
             </RoomContents>
         </Lobby>
     );
