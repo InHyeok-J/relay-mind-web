@@ -1,8 +1,7 @@
-import { promisify } from 'util';
+import { setUserList, getUserList, delUserList } from './utils/redisAsync';
 import { Server } from 'socket.io';
 import * as passport from 'passport';
 import { sessionMiddleware } from './index';
-import client from './database/redisClient';
 
 export default (server, app) => {
     const SocketServer = new Server(server, {
@@ -33,34 +32,27 @@ export default (server, app) => {
         }
         next();
     });
-    const getAsync = promisify(client.smembers).bind(client);
-    const setAsync = promisify((data, cb) =>
-        client.sadd('userList', data, (err, ...results) => cb(err, results))
-    ).bind(client);
-    const delAsync = promisify((data, cb) =>
-        client.srem('userList', data, (err, ...results) => cb(err, results))
-    ).bind(client);
 
     newNameSpace.on('connection', async (socket) => {
         try {
             console.log(socket.nsp.name + '연결 성공');
-
-            // const findUserList = await getAsync('userList');
-            await setAsync(socket.request.user.nickname);
-            const updateUserList = await getAsync('userList');
+            const { nickname } = socket.request.user;
+            await setUserList(nickname);
+            const updateUserList = await getUserList('userList');
 
             newNameSpace.emit('userList', { userList: updateUserList });
 
             socket.on('disconnect', async () => {
-                const findUserList = await getAsync('userList');
-                if (findUserList.includes(socket.request.user.nickname)) {
-                    await delAsync(socket.request.user.nickname);
+                const findUserList = await getUserList('userList');
+
+                if (findUserList.includes(nickname)) {
+                    await delUserList(nickname);
                 }
 
-                const updateUserList = await getAsync('userList');
+                const updateUserList = await getUserList('userList');
                 newNameSpace.emit('userList', { userList: updateUserList });
 
-                console.log('연결 종료', socket.request.user.nickname);
+                console.log('연결 종료', nickname);
             });
         } catch (err) {
             console.error(err);
