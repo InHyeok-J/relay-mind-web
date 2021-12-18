@@ -158,7 +158,25 @@ function GameRoom({ match }) {
                 <UserList>
                     <UserComponent>
                         {onlineList.userKeyArray.map((v) => {
-                            return <UserNickname>{v}</UserNickname>;
+                            const state = game.gamePlayer.map((user) => {
+                                if (
+                                    user.player.id ===
+                                        onlineList.roomUserList[v] &&
+                                    user.isOwner
+                                ) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            });
+                            if (state)
+                                return (
+                                    <div>
+                                        {v}
+                                        <span>(방장)</span>
+                                    </div>
+                                );
+                            else return <div>{v}</div>;
                         })}
                     </UserComponent>
                 </UserList>
