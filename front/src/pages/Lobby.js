@@ -11,10 +11,6 @@ import displayRoomList from './components/RoomListComponent';
 import Modal from 'react-modal';
 import CreateRoomModal from './components/CreateRoomModal';
 
-const onInfo = () => {
-    alert('내 정보 확인은 준비중입니다.');
-};
-
 const Lobby = styled.div`
     width: 100vw;
     height: 100vh;
@@ -124,6 +120,10 @@ const LobbyComponent = (callback, deps) => {
         });
     }, [io]);
 
+    const onInfo = () => {
+        history.push('/info');
+    };
+    
     const onLogout = useCallback(async (e) => {
         try {
             await dispatch(logoutAction());
