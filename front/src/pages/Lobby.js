@@ -107,14 +107,6 @@ const LobbyComponent = (callback, deps) => {
         await dispatch(getGameListAction());
         dispatch(setSocketAction());
     }, []);
-    let io;
-    useEffect(() => {
-        if (socket) {
-            socket.on('userList', (data) => {
-                setUserList(data.userList);
-            });
-        }
-    }, [socket]);
 
     useEffect(() => {
         if (socket) {
@@ -129,6 +121,13 @@ const LobbyComponent = (callback, deps) => {
                 setSocketError(data);
             });
         }
+        return () => {
+            if (socket) {
+                socket.off('userList');
+                socket.off('gameList');
+                socket.off('socketError');
+            }
+        };
     }, [socket]);
 
     const onLogout = useCallback(async (e) => {
@@ -144,13 +143,8 @@ const LobbyComponent = (callback, deps) => {
 
     return (
         <Lobby>
-            <Modal
-                isOpen={modalIsOpen}
-                style={modalStyle}
-                onRequestClose={() => setModalIsOpen(false)}
-                ariaHideApp={false}
-            >
-                <CreateRoomModal />
+            <Modal isOpen={modalIsOpen} style={modalStyle} ariaHideApp={false}>
+                <CreateRoomModal setModalIsOpen={setModalIsOpen} />
             </Modal>
             <Sidebar>
                 <img src={fullLogo} alt="FullLogo" style={FullLogo} />
@@ -202,7 +196,7 @@ const LobbyComponent = (callback, deps) => {
                 </ButtonWrapper>
                 {gameData && gameCountList
                     ? displayRoomList(gameData, gameCountList)
-                    : '로딩중'}
+                    : ''}
             </RoomContents>
         </Lobby>
     );

@@ -32,6 +32,11 @@ export class Game {
     title: string;
 
     @Column({
+        type: 'int',
+    })
+    phase: number;
+
+    @Column({
         type: 'enum',
         enum: gameStatus,
     })

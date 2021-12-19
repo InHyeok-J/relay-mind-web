@@ -19,11 +19,6 @@ function App() {
                         path="/GameRoom/:id"
                         component={Auth(GameRoom, true)}
                     />
-                    <Route
-                        exact
-                        path="/PlayGame/:id"
-                        component={Auth(PlayGame, true)}
-                    />
                 </Switch>
             </Router>
         </div>

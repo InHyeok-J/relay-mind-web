@@ -26,22 +26,33 @@ export const startGame = catchAsync(
         //3인 이상일때 시작
         const findGame = await gameRepository.findOne({
             where: { id: roomId },
+            relations: ['gamePlayer', 'gamePlayer.player'],
         });
-
+        console.log(findGame);
         try {
             await Promise.all(
                 keyArray.map(async (key) => {
-                    const findUser = await useRepository.findOne({
-                        where: { id: parseInt(list[key]) },
-                    });
-                    const newPlayer = new Player();
-                    newPlayer.isOwner = false;
-                    newPlayer.gameRoom = findGame;
-                    newPlayer.player = findUser;
-                    playerRepository.save(newPlayer);
+                    if (
+                        !(
+                            parseInt(list[key]) ===
+                            findGame.gamePlayer[0].player.id
+                        )
+                    ) {
+                        //방장 제외
+
+                        const findUser = await useRepository.findOne({
+                            where: { id: parseInt(list[key]) },
+                        });
+                        const newPlayer = new Player();
+                        newPlayer.isOwner = false;
+                        newPlayer.gameRoom = findGame;
+                        newPlayer.player = findUser;
+                        playerRepository.save(newPlayer);
+                    }
                 })
             );
             findGame.status = gameStatus.gaming;
+            findGame.updatedAt = new Date();
             await gameRepository.save(findGame);
         } catch (err) {
             const customError = new CustomError(
@@ -54,8 +65,11 @@ export const startGame = catchAsync(
         }
 
         //카운트 용 레디스에 저장
-        await setString(`game-${roomId}`, keyArray.length);
-        socket.to(`room-${roomId}`, { status: 'start' });
+        await setString(
+            `game-${roomId}-phase-${findGame.phase}`,
+            keyArray.length
+        );
+        socket.to(`room-${roomId}`).emit('gameStart', { status: 'start' });
 
         return res.customSuccess(200, '시작');
     }

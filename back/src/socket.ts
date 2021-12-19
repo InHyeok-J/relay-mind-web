@@ -23,9 +23,10 @@ export default (server, app) => {
 
     const wrap = (middleware) => (socket, next) =>
         middleware(socket.request, {}, next);
-    app.set('io', SocketServer);
 
     const newNameSpace = SocketServer.of('/relayMind');
+    app.set('io', newNameSpace);
+
     newNameSpace.use(wrap(sessionMiddleware));
     newNameSpace.use(wrap(passport.initialize()));
     newNameSpace.use(wrap(passport.session()));
@@ -60,7 +61,7 @@ export default (server, app) => {
                     `room-${roomId}`,
                     nickname
                 );
-                console.log(roomUser);
+                console.log('방 유저', roomUser);
                 if (!roomUser[0]) {
                     let roomCount = await HashGetOneAsync(
                         `gameUserCountList`,

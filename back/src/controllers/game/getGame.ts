@@ -12,9 +12,13 @@ export const getGame = catchAsync(
         try {
             const game = await gameRepository.findOne({
                 where: { id: req.params.id },
-                relations: ['gamePlayer', 'gamePlayer.player'],
+                relations: [
+                    'gamePlayer',
+                    'gamePlayer.player',
+                    'gamePlayer.drawList',
+                    'gamePlayer.drawList.drwaingUser',
+                ],
             });
-            console.log(game);
             if (!game) {
                 const customError = new CustomError(
                     400,

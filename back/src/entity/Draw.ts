@@ -1,3 +1,4 @@
+import { User } from './User';
 import { Player } from './Player';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -8,7 +9,7 @@ export class Draw {
 
     @Column({
         type: 'text',
-        nullable: false,
+        nullable: true,
     })
     drawValue: string;
 
@@ -20,10 +21,13 @@ export class Draw {
 
     @Column({
         type: 'int',
-        nullable: false,
+        nullable: true,
     })
     phase: number;
 
     @ManyToOne(() => Player, (player) => player.drawList)
     initKeyword: Player;
+
+    @ManyToOne(() => User, (user) => user.drawing)
+    drwaingUser: User;
 }

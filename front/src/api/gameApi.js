@@ -19,3 +19,21 @@ export const getGameInfo = async (id) => {
     const response = await axios.get(`/api/game/${id}`);
     return response.data.data;
 };
+
+export const gameStart = async (data) => {
+    const response = await axios.post('/api/game/start', data);
+    return response.data.data;
+};
+
+export const sendKeyword = async (data) => {
+    const response = await axios.post('/api/game/keyword', data);
+    console.log(response);
+    console.log(response.data);
+    return response.data;
+};
+
+export const drawAndkeyword = async (data) => {
+    console.log(data);
+    const response = await axios.post('/api/game/keyword/draw', data);
+    return response.data;
+};

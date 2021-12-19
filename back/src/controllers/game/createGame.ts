@@ -18,7 +18,7 @@ export const createGame = catchAsync(
         game.title = title;
         game.isSecret = isSecret;
         game.status = gameStatus.open;
-
+        game.phase = 1;
         if (isSecret) {
             game.password = password;
             game.hashPassword();
