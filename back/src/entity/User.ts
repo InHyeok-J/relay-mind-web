@@ -1,3 +1,4 @@
+import { Draw } from './Draw';
 import { Player } from './Player';
 import {
     Column,
@@ -29,6 +30,9 @@ export class User {
 
     @OneToMany(() => Player, (player) => player.player)
     myGame: Player[];
+
+    @OneToMany(() => Draw, (draw) => draw.drwaingUser)
+    drawing: Draw[];
 
     hashPassword() {
         this.password = bcrypt.hashSync(this.password, 10);

@@ -4,9 +4,9 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import { useDispatch } from 'react-redux';
 import useInput from '../../hooks/useInput';
-import { CreateGameRoomAction } from '../../module/game';
+import { CreateGameRoomAction, getGameListAction } from '../../module/game';
 
-const CreateRoomModal = ({ changeState }) => {
+const CreateRoomModal = ({ changeState, setModalIsOpen }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [title, onChangeTitle] = useInput('');
@@ -24,7 +24,8 @@ const CreateRoomModal = ({ changeState }) => {
                             password: password,
                         }),
                     );
-                    history.push('/Lobby');
+                    await dispatch(getGameListAction());
+                    setModalIsOpen(false);
                 } catch (err) {
                     console.error('에러:' + err);
                     alert('방 만들기에 실패했습니다');

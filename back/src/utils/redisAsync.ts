@@ -23,3 +23,9 @@ export const HashGetOneAsync = promisify((key, subkey, cb) =>
 export const HashDelAsync = promisify((key, subkey, cb) =>
     client.hdel(key, subkey, (err, ...results) => cb(err, results))
 ).bind(client);
+
+export const setString = promisify((key, value, cb) =>
+    client.set(key, value, (err, ...results) => cb(err, results))
+).bind(client);
+
+export const getString = promisify(client.get).bind(client);

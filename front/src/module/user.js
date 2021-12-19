@@ -8,6 +8,7 @@ const SIGNUP = 'user/SIGNUP';
 const LOGIN = 'user/LOGIN';
 const LOGOUT = 'user/LOGOUT';
 const GET_USER = 'user/GET_USER';
+const GET_PROFILE = 'user/GET_PROFILE';
 
 export const signUpAction = createAction(SIGNUP, userApi.signUp);
 export const signUpCleanAction = createAction(INIT_SIGNUP);
@@ -15,6 +16,7 @@ export const loginAction = createAction(LOGIN, userApi.login);
 export const logoutAction = createAction(LOGOUT, userApi.logout);
 export const userCleanAction = createAction(INIT_USER);
 export const getUserAction = createAction(GET_USER, userApi.getUser);
+export const getProfileAction = createAction(GET_PROFILE, userApi.getProfile);
 
 const initialState = {
     signup: null,
@@ -22,6 +24,7 @@ const initialState = {
     user: null,
     data: null,
     error: null,
+    profile: null,
 };
 
 export default handleActions(
@@ -73,6 +76,18 @@ export default handleActions(
             onSuccess: (state, { payload }) => ({
                 ...state,
                 user: payload,
+            }),
+            onFailure: (state, { payload }) => ({
+                ...state,
+                error: payload,
+                user: null,
+            }),
+        }),
+        ...pender({
+            type: GET_PROFILE,
+            onSuccess: (state, { payload }) => ({
+                ...state,
+                profile: payload,
             }),
             onFailure: (state, { payload }) => ({
                 ...state,

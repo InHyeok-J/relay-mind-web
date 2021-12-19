@@ -8,6 +8,7 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Draw } from './Draw';
 
 @Entity()
 export class Player {
@@ -29,4 +30,7 @@ export class Player {
 
     @ManyToOne(() => User, (user) => user.myGame)
     player: User;
+
+    @OneToMany(() => Draw, (draw) => draw.initKeyword)
+    drawList: Draw[];
 }

@@ -7,8 +7,10 @@ export const signUp = async (data) => {
 };
 
 export const login = async (data) => {
-    const response = await axios.post( '/api/user/login', data,{ withCredentials: true });
-    console.log(response.data)
+    const response = await axios.post('/api/user/login', data, {
+        withCredentials: true,
+    });
+    console.log(response.data);
     return response.data.data;
 };
 
@@ -23,6 +25,11 @@ export const getUser = async () => {
 };
 
 export const getGameList = async () => {
-    const response = await axios.get( '/api/game/list');
+    const response = await axios.get('/api/game/list');
     return response.data.data;
-}
+};
+
+export const getProfile = async () => {
+    const response = await axios.get('/api/user/profile');
+    return response.data.data;
+};
